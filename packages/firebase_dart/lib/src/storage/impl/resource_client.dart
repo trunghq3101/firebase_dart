@@ -1,12 +1,12 @@
+import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:firebase_dart/src/storage.dart';
-
-import 'location.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+
 import '../metadata.dart';
+import 'location.dart';
 
 class ResourceClient {
   /// Domain name for firebase storage.
@@ -271,7 +271,8 @@ class ListResultImpl extends ListResult {
   ListResultImpl.fromJson(Reference reference, Map<String, dynamic> json)
       : this(reference,
             items: (json['items'] as List)
-                .map((v) => reference.child(v['name']))
+                .map((v) => reference.child((v['name'] as String)
+                    .replaceFirst('${reference.name}/', '')))
                 .toList(),
             nextPageToken: json['nextPageToken'],
             prefixes: (json['prefixes'] as List)
